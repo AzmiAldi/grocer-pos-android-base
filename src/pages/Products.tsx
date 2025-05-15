@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import { useProducts } from '../contexts/ProductContext';
@@ -9,16 +8,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Plus, Pencil, Trash2, Search, AlertTriangle, X } from 'lucide-react';
-
-// Helper function to format currency in Indonesian Rupiah
-const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(amount);
-};
+import { formatCurrency } from '@/utils/formatCurrency';
+import ProductSearchInput from '@/components/products/ProductSearchInput';
+import NoProductsFound from '@/components/products/NoProductsFound';
+import ProductTable from '@/components/products/ProductTable';
+import ProductDialog from '@/components/products/ProductDialog';
 
 const Products = () => {
   const { products, loading, addProduct, updateProduct, deleteProduct } = useProducts();
@@ -103,6 +97,9 @@ const Products = () => {
       )
     : products;
   
+  // Hardcoded categories for the dialog's datalist
+  const categories = ["Drinks", "Eatery"];
+
   return (
     <Layout>
       <div className="space-y-6 animate-fade-in">
@@ -117,210 +114,38 @@ const Products = () => {
           </Button>
         </div>
         
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input 
-            placeholder="Search products by name, category or barcode..." 
-            className="pl-10"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+        <ProductSearchInput 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
         
         {loading ? (
           <div className="text-center py-10">Loading products...</div>
         ) : filteredProducts.length === 0 ? (
-          <Card>
-            <CardContent className="flex flex-col items-center justify-center py-10">
-              <AlertTriangle className="h-10 w-10 text-amber-500 mb-4" />
-              <h3 className="font-semibold text-xl">No products found</h3>
-              {searchTerm ? (
-                <p className="text-gray-500 mt-1">Try changing your search term</p>
-              ) : (
-                <p className="text-gray-500 mt-1">Add your first product to get started</p>
-              )}
-              {searchTerm && (
-                <Button 
-                  variant="outline" 
-                  className="mt-4"
-                  onClick={() => setSearchTerm('')}
-                >
-                  <X className="mr-2 h-4 w-4" />
-                  Clear search
-                </Button>
-              )}
-            </CardContent>
-          </Card>
+          <NoProductsFound 
+            searchTerm={searchTerm}
+            onClearSearch={() => setSearchTerm('')}
+          />
         ) : (
-          <div className="rounded-md border overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500">Name</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500">Category</th>
-                  <th className="px-4 py-3 text-right font-medium text-gray-500">Price</th>
-                  <th className="px-4 py-3 text-right font-medium text-gray-500">Stock</th>
-                  <th className="px-4 py-3 text-center font-medium text-gray-500">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {filteredProducts.map((product) => (
-                  <tr key={product.id} className="bg-white">
-                    <td className="px-4 py-3">
-                      <div className="font-medium">{product.name}</div>
-                      <div className="text-xs text-gray-500">Barcode: {product.barcode}</div>
-                    </td>
-                    <td className="px-4 py-3 text-gray-500">{product.category}</td>
-                    <td className="px-4 py-3 text-right">{formatCurrency(product.price)}</td>
-                    <td className="px-4 py-3 text-right">
-                      <span 
-                        className={`px-2 py-1 rounded-full text-xs ${
-                          product.stock <= product.minStock
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-green-100 text-green-800'
-                        }`}
-                      >
-                        {product.stock} {product.unit}s
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex justify-center space-x-2">
-                        <Button variant="ghost" size="sm" onClick={() => handleOpenDialog(product)}>
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleDelete(product.id)}>
-                          <Trash2 className="h-4 w-4 text-red-500" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ProductTable 
+            products={filteredProducts}
+            onEditProduct={handleOpenDialog}
+            onDeleteProduct={handleDelete}
+            formatCurrency={formatCurrency}
+          />
         )}
       </div>
       
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>{editingProduct ? 'Edit Product' : 'Add New Product'}</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleSubmit}>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Product Name</Label>
-                  <Input 
-                    id="name" 
-                    name="name"
-                    value={formData.name} 
-                    onChange={handleInputChange} 
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="barcode">Barcode</Label>
-                  <Input 
-                    id="barcode" 
-                    name="barcode"
-                    value={formData.barcode} 
-                    onChange={handleInputChange} 
-                  />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="category">Category</Label>
-                  <Input 
-                    id="category" 
-                    name="category"
-                    value={formData.category} 
-                    onChange={handleInputChange} 
-                    list="categories"
-                    required
-                  />
-                  <datalist id="categories">
-                    <option value="Drinks" />
-                    <option value="Eatery" />
-                  </datalist>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="unit">Unit</Label>
-                  <Input 
-                    id="unit" 
-                    name="unit"
-                    value={formData.unit} 
-                    onChange={handleInputChange} 
-                    required
-                  />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="price">Price (Rp)</Label>
-                  <Input 
-                    id="price" 
-                    name="price"
-                    type="number" 
-                    step="1000"
-                    min="0"
-                    value={formData.price} 
-                    onChange={handleInputChange} 
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="costPrice">Cost Price (Rp)</Label>
-                  <Input 
-                    id="costPrice" 
-                    name="costPrice"
-                    type="number" 
-                    step="1000"
-                    min="0"
-                    value={formData.costPrice} 
-                    onChange={handleInputChange} 
-                  />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="stock">Current Stock</Label>
-                  <Input 
-                    id="stock" 
-                    name="stock"
-                    type="number" 
-                    value={formData.stock} 
-                    onChange={handleInputChange} 
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="minStock">Minimum Stock</Label>
-                  <Input 
-                    id="minStock" 
-                    name="minStock"
-                    type="number" 
-                    value={formData.minStock} 
-                    onChange={handleInputChange} 
-                  />
-                </div>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={handleCloseDialog}>
-                Cancel
-              </Button>
-              <Button type="submit">
-                {editingProduct ? 'Update Product' : 'Add Product'}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <ProductDialog
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        editingProduct={editingProduct}
+        formData={formData}
+        onInputChange={handleInputChange}
+        onSubmit={handleSubmit}
+        onClose={handleCloseDialog}
+        categories={categories}
+      />
     </Layout>
   );
 };
