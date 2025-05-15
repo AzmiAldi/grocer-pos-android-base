@@ -10,6 +10,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Label } from '@/components/ui/label';
 import { Plus, Pencil, Trash2, Search, AlertTriangle, X } from 'lucide-react';
 
+// Helper function to format currency in Indonesian Rupiah
+const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+};
+
 const Products = () => {
   const { products, loading, addProduct, updateProduct, deleteProduct } = useProducts();
   const [searchTerm, setSearchTerm] = useState('');
@@ -161,7 +171,7 @@ const Products = () => {
                       <div className="text-xs text-gray-500">Barcode: {product.barcode}</div>
                     </td>
                     <td className="px-4 py-3 text-gray-500">{product.category}</td>
-                    <td className="px-4 py-3 text-right">${product.price.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-right">{formatCurrency(product.price)}</td>
                     <td className="px-4 py-3 text-right">
                       <span 
                         className={`px-2 py-1 rounded-full text-xs ${
@@ -228,8 +238,13 @@ const Products = () => {
                     name="category"
                     value={formData.category} 
                     onChange={handleInputChange} 
+                    list="categories"
                     required
                   />
+                  <datalist id="categories">
+                    <option value="Drinks" />
+                    <option value="Eatery" />
+                  </datalist>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="unit">Unit</Label>
@@ -245,12 +260,12 @@ const Products = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="price">Price ($)</Label>
+                  <Label htmlFor="price">Price (Rp)</Label>
                   <Input 
                     id="price" 
                     name="price"
                     type="number" 
-                    step="0.01"
+                    step="1000"
                     min="0"
                     value={formData.price} 
                     onChange={handleInputChange} 
@@ -258,12 +273,12 @@ const Products = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="costPrice">Cost Price ($)</Label>
+                  <Label htmlFor="costPrice">Cost Price (Rp)</Label>
                   <Input 
                     id="costPrice" 
                     name="costPrice"
                     type="number" 
-                    step="0.01"
+                    step="1000"
                     min="0"
                     value={formData.costPrice} 
                     onChange={handleInputChange} 

@@ -33,6 +33,16 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Label } from '@/components/ui/label';
 import { Sale } from '../types';
 
+// Helper function to format currency in Indonesian Rupiah
+const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+};
+
 const PosScreen = () => {
   const { products } = useProducts();
   const { items, addToCart, removeFromCart, updateQuantity, clearCart, subtotal, tax, total, discount, setDiscount } = useCart();
@@ -194,7 +204,7 @@ const PosScreen = () => {
                       <div className="text-center">
                         <div className="font-medium truncate">{product.name}</div>
                         <div className="text-sm text-gray-500 truncate">{product.category}</div>
-                        <div className="font-bold mt-1">${product.price.toFixed(2)}</div>
+                        <div className="font-bold mt-1">{formatCurrency(product.price)}</div>
                         <div className="text-xs text-gray-500 mt-1">
                           {product.stock > 0 ? (
                             <span>{product.stock} in stock</span>
@@ -247,7 +257,7 @@ const PosScreen = () => {
                   <div key={item.product.id} className="flex justify-between items-center p-3 border rounded-md">
                     <div className="flex-1">
                       <div className="font-medium">{item.product.name}</div>
-                      <div className="text-sm text-gray-500">${item.product.price.toFixed(2)} each</div>
+                      <div className="text-sm text-gray-500">{formatCurrency(item.product.price)} each</div>
                     </div>
                     
                     <div className="flex items-center gap-2">
@@ -291,20 +301,20 @@ const PosScreen = () => {
             <div className="w-full space-y-1 mb-4">
               <div className="flex justify-between text-sm">
                 <span>Subtotal:</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>{formatCurrency(subtotal)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Tax (10%):</span>
-                <span>${tax.toFixed(2)}</span>
+                <span>{formatCurrency(tax)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">Discount:</span>
                 <div className="flex items-center gap-2">
-                  <span>$</span>
+                  <span>Rp</span>
                   <Input 
                     type="number"
                     min="0"
-                    step="0.01"
+                    step="1"
                     value={discount}
                     onChange={handleDiscountChange}
                     className="w-20 h-8 text-right"
@@ -313,7 +323,7 @@ const PosScreen = () => {
               </div>
               <div className="flex justify-between font-bold text-lg pt-2 border-t mt-2">
                 <span>Total:</span>
-                <span>${total.toFixed(2)}</span>
+                <span>{formatCurrency(total)}</span>
               </div>
             </div>
             
@@ -387,7 +397,7 @@ const PosScreen = () => {
                     id="cashAmount"
                     type="number"
                     min={total}
-                    step="0.01"
+                    step="1"
                     value={cashAmount || ''}
                     onChange={(e) => setCashAmount(parseFloat(e.target.value) || 0)}
                     placeholder="Enter cash amount"
@@ -396,7 +406,7 @@ const PosScreen = () => {
                   {cashAmount > 0 && (
                     <div className="flex justify-between font-medium mt-2 p-2 bg-gray-50 rounded-md">
                       <span>Change:</span>
-                      <span>${calculateChange().toFixed(2)}</span>
+                      <span>{formatCurrency(calculateChange())}</span>
                     </div>
                   )}
                 </div>
@@ -414,7 +424,7 @@ const PosScreen = () => {
                 </div>
                 <div className="flex justify-between font-bold mt-1">
                   <span>Total:</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>{formatCurrency(total)}</span>
                 </div>
               </div>
             </div>
