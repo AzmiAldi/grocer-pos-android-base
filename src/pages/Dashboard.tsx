@@ -40,7 +40,7 @@ const Dashboard = () => {
         </div>
         
         {!currentShift && (
-          <Alert variant="warning" className="bg-amber-50 border-amber-200">
+          <Alert variant="destructive" className="bg-amber-50 border-amber-200">
             <AlertTriangle className="h-4 w-4 text-amber-600" />
             <AlertTitle className="text-amber-600">No active shift</AlertTitle>
             <AlertDescription>
