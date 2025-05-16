@@ -35,14 +35,14 @@ const Login = () => {
           <div className="inline-block p-3 bg-pos-primary text-white rounded-full mb-4">
             <ShoppingCart size={32} />
           </div>
-          <h1 className="text-3xl font-bold text-pos-primary">Grocery POS</h1>
+          <h1 className="text-3xl font-bold text-pos-primary">Stello Coffee</h1>
           <p className="text-gray-500 mt-2">Point of Sale System</p>
         </div>
         
         <Card>
           <CardHeader>
             <CardTitle>Login</CardTitle>
-            <CardDescription>Enter your credentials to access the POS system</CardDescription>
+            <CardDescription>Masukkan akun untuk mengakses POS sistem</CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
@@ -82,7 +82,7 @@ const Login = () => {
         </Card>
         
         <div className="mt-6 text-center text-sm text-gray-500">
-          <p>Demo credentials:</p>
+          <p>credentials:</p>
           <p>Username: admin | Password: admin123</p>
           <p>Username: cashier | Password: cashier123</p>
         </div>

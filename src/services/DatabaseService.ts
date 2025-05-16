@@ -14,15 +14,15 @@ class DatabaseService {
       { 
         id: '1', 
         username: 'admin', 
-        password: 'admin123', // In a real app, this would be hashed
+        password: 'admin1313', // In a real app, this would be hashed
         name: 'Admin User',
         role: 'admin'
       },
       { 
         id: '2', 
-        username: 'cashier', 
-        password: 'cashier123', 
-        name: 'Cashier User',
+        username: 'zikoy', 
+        password: 'zikoy123', 
+        name: 'zikoy',
         role: 'cashier'
       },
     ];
