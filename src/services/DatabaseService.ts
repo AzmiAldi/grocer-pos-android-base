@@ -21,7 +21,7 @@ class DatabaseService {
       { 
         id: '2', 
         username: 'zikoy', 
-        password: 'zikoy123', 
+        password: 'zikoy1313', 
         name: 'zikoy',
         role: 'cashier'
       },
