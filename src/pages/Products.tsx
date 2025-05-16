@@ -7,81 +7,28 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { Plus, Pencil, Trash2, Search, AlertTriangle, X } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { formatCurrency } from '@/utils/formatCurrency';
 import ProductSearchInput from '@/components/products/ProductSearchInput';
 import NoProductsFound from '@/components/products/NoProductsFound';
 import ProductTable from '@/components/products/ProductTable';
 import ProductDialog from '@/components/products/ProductDialog';
+import { useProductForm } from '@/hooks/useProductForm';
 
 const Products = () => {
   const { products, loading, addProduct, updateProduct, deleteProduct } = useProducts();
   const [searchTerm, setSearchTerm] = useState('');
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [formData, setFormData] = useState<Omit<Product, "id">>({
-    name: '',
-    barcode: '',
-    category: '',
-    price: 0,
-    costPrice: 0,
-    stock: 0,
-    minStock: 0,
-    unit: 'piece',
-    imageUrl: ''
-  });
   
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      barcode: '',
-      category: '',
-      price: 0,
-      costPrice: 0,
-      stock: 0,
-      minStock: 0,
-      unit: 'piece',
-      imageUrl: ''
-    });
-    setEditingProduct(null);
-  };
-  
-  const handleOpenDialog = (product?: Product) => {
-    if (product) {
-      setEditingProduct(product);
-      setFormData({ ...product });
-    } else {
-      resetForm();
-    }
-    setIsDialogOpen(true);
-  };
-  
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
-    resetForm();
-  };
-  
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'number' ? parseFloat(value) || 0 : value
-    });
-  };
-  
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      if (editingProduct) {
-        await updateProduct({ ...formData, id: editingProduct.id });
-      } else {
-        await addProduct(formData);
-      }
-      handleCloseDialog();
-    } catch (error) {
-      console.error('Error saving product:', error);
-    }
-  };
+  const {
+    isDialogOpen,
+    setIsDialogOpen,
+    editingProduct,
+    formData,
+    handleOpenDialog,
+    handleCloseDialog,
+    handleInputChange,
+    handleSubmit,
+  } = useProductForm({ addProduct, updateProduct });
   
   const handleDelete = async (productId: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
@@ -129,7 +76,7 @@ const Products = () => {
         ) : (
           <ProductTable 
             products={filteredProducts}
-            onEditProduct={handleOpenDialog}
+            onEditProduct={handleOpenDialog} // Pass the hook's handleOpenDialog
             onDeleteProduct={handleDelete}
             formatCurrency={formatCurrency}
           />
@@ -138,12 +85,12 @@ const Products = () => {
       
       <ProductDialog
         isOpen={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
+        onOpenChange={setIsDialogOpen} // Pass the hook's setIsDialogOpen
         editingProduct={editingProduct}
         formData={formData}
         onInputChange={handleInputChange}
         onSubmit={handleSubmit}
-        onClose={handleCloseDialog}
+        onClose={handleCloseDialog} // Pass the hook's handleCloseDialog
         categories={categories}
       />
     </Layout>
