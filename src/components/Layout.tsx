@@ -86,7 +86,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       {!isMobile && (
         <div className="w-64 bg-white border-r border-gray-200 p-4 flex flex-col">
           <div className="mb-8 text-center">
-            <h1 className="text-2xl font-bold text-pos-primary">Grocery POS</h1>
+            <h1 className="text-2xl font-bold text-pos-primary">Stello POS</h1>
             {currentShift && <p className="text-sm text-green-500 mt-1">Shift Open</p>}
             {!currentShift && <p className="text-sm text-red-500 mt-1">No Shift Open</p>}
           </div>
@@ -128,7 +128,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               </SheetTrigger>
               <SheetContent side="left" className="w-[250px] p-0">
                 <div className="p-4 border-b">
-                  <h1 className="text-xl font-bold text-pos-primary">Grocery POS</h1>
+                  <h1 className="text-xl font-bold text-pos-primary">Stello POS</h1>
                   {currentShift && <p className="text-sm text-green-500 mt-1">Shift Open</p>}
                   {!currentShift && <p className="text-sm text-red-500 mt-1">No Shift Open</p>}
                 </div>
@@ -159,7 +159,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               </SheetContent>
             </Sheet>
             
-            <h1 className="text-lg font-bold text-pos-primary">Grocery POS</h1>
+            <h1 className="text-lg font-bold text-pos-primary">Stello POS</h1>
             
             {currentShift ? (
               <span className="text-xs px-2 py-1 bg-green-50 text-green-600 rounded-full">

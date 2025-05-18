@@ -198,7 +198,7 @@ const Receipt = () => {
               <div className="flex-1 overflow-y-auto p-4">
                 <div className="max-w-md mx-auto p-4 border rounded-md" id="receipt-container">
                   <div className="text-center mb-4">
-                    <h1 className="text-xl font-bold">Grocery Store</h1>
+                    <h1 className="text-xl font-bold">Stello Coffee</h1>
                     <p className="text-sm">123 Main Street, City</p>
                     <p className="text-sm">Tel: (123) 456-7890</p>
                   </div>
