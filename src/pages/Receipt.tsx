@@ -103,7 +103,7 @@ const Receipt = () => {
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="font-bold">${sale.total.toFixed(2)}</div>
+                            <div className="font-bold">Rp{sale.total.toFixed(2)}</div>
                             <div className="text-xs text-gray-500">{getFormattedDate(sale.timestamp)}</div>
                           </div>
                         </div>
@@ -155,7 +155,7 @@ const Receipt = () => {
                               </div>
                             </div>
                             <div className="text-right">
-                              <div className="font-bold">${sale.total.toFixed(2)}</div>
+                              <div className="font-bold">Rp{sale.total.toFixed(2)}</div>
                               <div className="text-xs text-gray-500">{getFormattedTime(sale.timestamp)}</div>
                             </div>
                           </div>
@@ -237,9 +237,9 @@ const Receipt = () => {
                     {selectedSale.items.map((item, index) => (
                       <div key={index} className="flex justify-between text-sm py-1">
                         <span className="w-5/12 truncate">{item.name}</span>
-                        <span className="w-2/12 text-right">${item.unitPrice.toFixed(2)}</span>
+                        <span className="w-2/12 text-right">Rp{item.unitPrice.toFixed(2)}</span>
                         <span className="w-2/12 text-right">{item.quantity}</span>
-                        <span className="w-3/12 text-right">${item.total.toFixed(2)}</span>
+                        <span className="w-3/12 text-right">Rp{item.total.toFixed(2)}</span>
                       </div>
                     ))}
                   </div>
@@ -247,21 +247,21 @@ const Receipt = () => {
                   <div className="space-y-1 mb-4">
                     <div className="flex justify-between text-sm">
                       <span>Subtotal:</span>
-                      <span>${selectedSale.subtotal.toFixed(2)}</span>
+                      <span>Rp{selectedSale.subtotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span>Tax:</span>
-                      <span>${selectedSale.tax.toFixed(2)}</span>
+                      <span>Rp{selectedSale.tax.toFixed(2)}</span>
                     </div>
                     {selectedSale.discount > 0 && (
                       <div className="flex justify-between text-sm">
                         <span>Discount:</span>
-                        <span>-${selectedSale.discount.toFixed(2)}</span>
+                        <span>-Rp{selectedSale.discount.toFixed(2)}</span>
                       </div>
                     )}
                     <div className="flex justify-between font-bold pt-2 border-t">
                       <span>Total:</span>
-                      <span>${selectedSale.total.toFixed(2)}</span>
+                      <span>Rp{selectedSale.total.toFixed(2)}</span>
                     </div>
                   </div>
                   

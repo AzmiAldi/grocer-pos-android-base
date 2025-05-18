@@ -63,7 +63,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
-                <div className="text-2xl font-bold">${totalSales.toFixed(2)}</div>
+                <div className="text-2xl font-bold">Rp{totalSales.toFixed(2)}</div>
                 <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
                   <DollarSign className="h-5 w-5 text-pos-primary" />
                 </div>
