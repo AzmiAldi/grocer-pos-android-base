@@ -87,6 +87,14 @@ const PosScreen = () => {
       name: item.product.name
     }));
     
+    let saleCashTendered: number | undefined = undefined;
+    let saleChange: number | undefined = undefined;
+
+    if (paymentMethod === 'cash') {
+      saleCashTendered = cashAmount;
+      saleChange = calculateChange(); // Use the existing calculateChange function
+    }
+
     const sale: Omit<Sale, "id"> = {
       timestamp: new Date().toISOString(),
       items: saleItems,
@@ -97,7 +105,9 @@ const PosScreen = () => {
       paymentMethod,
       cashierId: user.id,
       shiftId: currentShift.id,
-      customerName: customerName || undefined
+      customerName: customerName || undefined,
+      cashTendered: saleCashTendered,
+      change: saleChange,
     };
     
     const newSale = databaseService.addSale(sale);
@@ -119,7 +129,7 @@ const PosScreen = () => {
   };
   
   const calculateChange = () => {
-    return cashAmount > total ? cashAmount - total : 0;
+    return paymentMethod === 'cash' && cashAmount > total ? cashAmount - total : 0;
   };
   
   return (
@@ -166,7 +176,7 @@ const PosScreen = () => {
         onPaymentMethodChange={setPaymentMethod}
         cashAmount={cashAmount}
         onCashAmountChange={setCashAmount}
-        calculateChange={calculateChange}
+        calculateChange={calculateChange} // This calculateChange is from PosScreen
         onCompleteSale={handleCompleteSale}
         formatCurrency={formatCurrency}
       />

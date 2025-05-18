@@ -1,4 +1,3 @@
-
 export interface User {
   id: string;
   username: string;
@@ -45,6 +44,8 @@ export interface Sale {
   cashierId: string;
   shiftId: string;
   customerName?: string;
+  cashTendered?: number; // Added for cash payments
+  change?: number;       // Added for change given
 }
 
 export interface Shift {

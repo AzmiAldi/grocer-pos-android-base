@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { databaseService } from '../services/DatabaseService';
 import { useAuth } from '../contexts/AuthContext';
 import { Search, Printer, ArrowLeft, Calendar, Clock } from 'lucide-react';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 const Receipt = () => {
   const { user } = useAuth();
@@ -49,19 +50,6 @@ const Receipt = () => {
   const getFormattedTime = (timestamp: string) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString();
-  };
-
-  const calculateChange = (): number => {
-    if (!selectedSale) {
-      return 0.00;
-    }
-    // Placeholder logic. Actual change calculation would be: cashTendered - selectedSale.total
-    // Example:
-    // const cashTendered = selectedSale.cashTendered; // Assuming 'cashTendered' field exists on Sale
-    // if (typeof cashTendered === 'number' && selectedSale.total) {
-    //   return cashTendered > selectedSale.total ? cashTendered - selectedSale.total : 0.00;
-    // }
-    return 0.00; 
   };
 
   const filteredSales = sales.filter(sale => {
@@ -115,7 +103,7 @@ const Receipt = () => {
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="font-bold">Rp{sale.total.toFixed(2)}</div>
+                            <div className="font-bold">{formatCurrency(sale.total)}</div>
                             <div className="text-xs text-gray-500">{getFormattedDate(sale.timestamp)}</div>
                           </div>
                         </div>
@@ -167,7 +155,7 @@ const Receipt = () => {
                               </div>
                             </div>
                             <div className="text-right">
-                              <div className="font-bold">Rp{sale.total.toFixed(2)}</div>
+                              <div className="font-bold">{formatCurrency(sale.total)}</div>
                               <div className="text-xs text-gray-500">{getFormattedTime(sale.timestamp)}</div>
                             </div>
                           </div>
@@ -249,9 +237,9 @@ const Receipt = () => {
                     {selectedSale.items.map((item, index) => (
                       <div key={index} className="flex justify-between text-sm py-1">
                         <span className="w-5/12 truncate">{item.name}</span>
-                        <span className="w-2/12 text-right">Rp{item.unitPrice.toFixed(2)}</span>
+                        <span className="w-2/12 text-right">{formatCurrency(item.unitPrice)}</span>
                         <span className="w-2/12 text-right">{item.quantity}</span>
-                        <span className="w-3/12 text-right">Rp{item.total.toFixed(2)}</span>
+                        <span className="w-3/12 text-right">{formatCurrency(item.total)}</span>
                       </div>
                     ))}
                   </div>
@@ -259,26 +247,33 @@ const Receipt = () => {
                   <div className="space-y-1 mb-4">
                     <div className="flex justify-between text-sm">
                       <span>Subtotal:</span>
-                      <span>Rp{selectedSale.subtotal.toFixed(2)}</span>
+                      <span>{formatCurrency(selectedSale.subtotal)}</span>
                     </div>
-                    <div className="flex justify-between text-sm">
-                      <span>Change:</span>
-                      {/* Fixed: Call calculateChange() before toFixed */}
-                      <span>Rp{calculateChange().toFixed(2)}</span>
-                    </div>
+                    {selectedSale.paymentMethod === 'cash' && typeof selectedSale.cashTendered === 'number' && (
+                      <div className="flex justify-between text-sm">
+                        <span>Cash Tendered:</span>
+                        <span>{formatCurrency(selectedSale.cashTendered)}</span>
+                      </div>
+                    )}
+                    {selectedSale.paymentMethod === 'cash' && typeof selectedSale.change === 'number' && selectedSale.change > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Change:</span>
+                        <span>{formatCurrency(selectedSale.change)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between text-sm">
                       <span>Tax:</span>
-                      <span>Rp{selectedSale.tax.toFixed(2)}</span>
+                      <span>{formatCurrency(selectedSale.tax)}</span>
                     </div>
                     {selectedSale.discount > 0 && (
                       <div className="flex justify-between text-sm">
                         <span>Discount:</span>
-                        <span>-Rp{selectedSale.discount.toFixed(2)}</span>
+                        <span>-{formatCurrency(selectedSale.discount)}</span>
                       </div>
                     )}
                     <div className="flex justify-between font-bold pt-2 border-t">
                       <span>Total:</span>
-                      <span>Rp{selectedSale.total.toFixed(2)}</span>
+                      <span>{formatCurrency(selectedSale.total)}</span>
                     </div>
                   </div>
                   
