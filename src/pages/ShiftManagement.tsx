@@ -137,7 +137,7 @@ const ShiftManagement = () => {
                   </div>
                   <div className="p-4 bg-gray-50 rounded-md">
                     <div className="text-sm text-gray-500">Opening Balance</div>
-                    <div className="font-medium">${currentShift.openingBalance.toFixed(2)}</div>
+                    <div className="font-medium">Rp{currentShift.openingBalance.toFixed(2)}</div>
                   </div>
                 </div>
                 
@@ -147,7 +147,7 @@ const ShiftManagement = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="text-sm text-gray-500">Total Sales</div>
-                          <div className="text-xl font-bold">${calculateTotalSales().toFixed(2)}</div>
+                          <div className="text-xl font-bold">Rp{calculateTotalSales().toFixed(2)}</div>
                         </div>
                         <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
                           <ShoppingBag className="h-5 w-5 text-blue-600" />
@@ -161,7 +161,7 @@ const ShiftManagement = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="text-sm text-gray-500">Cash Sales</div>
-                          <div className="text-xl font-bold">${calculateCashSales().toFixed(2)}</div>
+                          <div className="text-xl font-bold">Rp{calculateCashSales().toFixed(2)}</div>
                         </div>
                         <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
                           <DollarSign className="h-5 w-5 text-green-600" />
@@ -178,7 +178,7 @@ const ShiftManagement = () => {
                         <div>
                           <div className="text-sm text-gray-500">Card/Other Sales</div>
                           <div className="text-xl font-bold">
-                            ${(calculateCardSales() + calculateOtherSales()).toFixed(2)}
+                            Rp{(calculateCardSales() + calculateOtherSales()).toFixed(2)}
                           </div>
                         </div>
                         <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
@@ -214,7 +214,7 @@ const ShiftManagement = () => {
                                 {new Date(sale.timestamp).toLocaleTimeString()}
                               </td>
                               <td className="px-4 py-2 capitalize">{sale.paymentMethod}</td>
-                              <td className="px-4 py-2 text-right">${sale.total.toFixed(2)}</td>
+                              <td className="px-4 py-2 text-right">Rp{sale.total.toFixed(2)}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -264,7 +264,7 @@ const ShiftManagement = () => {
           <div className="py-4">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="openingBalance">Opening Cash Balance ($)</Label>
+                <Label htmlFor="openingBalance">Opening Cash Balance (Rp)</Label>
                 <Input
                   id="openingBalance"
                   type="number"
@@ -306,7 +306,7 @@ const ShiftManagement = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="closingBalance">Closing Cash Balance ($)</Label>
+                <Label htmlFor="closingBalance">Closing Cash Balance (Rp)</Label>
                 <Input
                   id="closingBalance"
                   type="number"
@@ -323,15 +323,15 @@ const ShiftManagement = () => {
               <div className="p-3 bg-gray-50 rounded-md">
                 <div className="flex justify-between text-sm">
                   <span>Opening Balance:</span>
-                  <span>${currentShift?.openingBalance.toFixed(2)}</span>
+                  <span>Rp{currentShift?.openingBalance.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Cash Sales:</span>
-                  <span>${calculateCashSales().toFixed(2)}</span>
+                  <span>Rp{calculateCashSales().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm font-medium pt-2 mt-2 border-t">
                   <span>Expected Closing:</span>
-                  <span>${(currentShift?.openingBalance + calculateCashSales()).toFixed(2)}</span>
+                  <span>Rp{(currentShift?.openingBalance + calculateCashSales()).toFixed(2)}</span>
                 </div>
               </div>
             </div>
