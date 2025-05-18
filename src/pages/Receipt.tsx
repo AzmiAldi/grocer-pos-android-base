@@ -250,6 +250,10 @@ const Receipt = () => {
                       <span>Rp{selectedSale.subtotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
+                      <span>Change:</span>
+                      <span>Rp{calculateChange}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
                       <span>Tax:</span>
                       <span>Rp{selectedSale.tax.toFixed(2)}</span>
                     </div>
