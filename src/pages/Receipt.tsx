@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
@@ -52,9 +51,19 @@ const Receipt = () => {
     return date.toLocaleTimeString();
   };
 
-  const calculateChange = () => {
-      return cashAmount > total ? cashAmount - total : 0;
-  
+  const calculateChange = (): number => {
+    if (!selectedSale) {
+      return 0.00;
+    }
+    // Placeholder logic. Actual change calculation would be: cashTendered - selectedSale.total
+    // Example:
+    // const cashTendered = selectedSale.cashTendered; // Assuming 'cashTendered' field exists on Sale
+    // if (typeof cashTendered === 'number' && selectedSale.total) {
+    //   return cashTendered > selectedSale.total ? cashTendered - selectedSale.total : 0.00;
+    // }
+    return 0.00; 
+  };
+
   const filteredSales = sales.filter(sale => {
     if (!searchTerm) return true;
     
@@ -254,7 +263,8 @@ const Receipt = () => {
                     </div>
                     <div className="flex justify-between text-sm">
                       <span>Change:</span>
-                      <span>Rp{calculateChange.toFixed(2)}</span>
+                      {/* Fixed: Call calculateChange() before toFixed */}
+                      <span>Rp{calculateChange().toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span>Tax:</span>
