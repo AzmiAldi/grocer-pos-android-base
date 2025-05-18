@@ -52,7 +52,8 @@ const Receipt = () => {
     return date.toLocaleTimeString();
   };
 
-  const getChange = cashAmount - selectedSale.subtotal
+  const calculateChange = () => {
+      return cashAmount > total ? cashAmount - total : 0;
   
   const filteredSales = sales.filter(sale => {
     if (!searchTerm) return true;
@@ -253,7 +254,7 @@ const Receipt = () => {
                     </div>
                     <div className="flex justify-between text-sm">
                       <span>Change:</span>
-                      <span>Rp{getChange.toFixed(2)}</span>
+                      <span>Rp{calculateChange.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span>Tax:</span>
